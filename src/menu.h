@@ -15,6 +15,11 @@ public:
     explicit Menu(QWidget *parent = 0);
     ~Menu();
 
+private slots:
+    void on_initialConfigButton_clicked();
+
+    void on_systemsButton_clicked();
+
 private:
     Ui::Menu *ui;
 };
