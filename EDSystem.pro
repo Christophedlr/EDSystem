@@ -24,11 +24,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-        src\main.cpp \
-        src\menu.cpp
+        src/main.cpp \
+    src/configuration/firstconfig.cpp \
+    src/menu.cpp
 
 HEADERS += \
-        src\menu.h
+    src/configuration/firstconfig.h \
+    src/menu.h
 
 FORMS += \
-        src\menu.ui
+        src\menu.ui \
+    src/configuration/firstconfig.ui
+
+DISTFILES += \
+    sql/base.sql
