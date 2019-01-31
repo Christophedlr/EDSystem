@@ -2,6 +2,7 @@
 #define SYSTEMS_H
 
 #include <QWidget>
+#include "database.h"
 
 namespace Ui {
 class Systems;
@@ -24,6 +25,7 @@ private slots:
 
 private:
     Ui::Systems *ui;
+    Database m_database;
     void refreshTable();
 };
 

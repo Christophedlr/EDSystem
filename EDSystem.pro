@@ -27,17 +27,22 @@ SOURCES += \
         src/main.cpp \
     src/configuration/firstconfig.cpp \
     src/menu.cpp \
-    src/systems.cpp
+    src/systems.cpp \
+    src/stations.cpp \
+    src/database.cpp
 
 HEADERS += \
     src/configuration/firstconfig.h \
     src/menu.h \
-    src/systems.h
+    src/systems.h \
+    src/stations.h \
+    src/database.h
 
 FORMS += \
         src\menu.ui \
     src/configuration/firstconfig.ui \
-    src/systems.ui
+    src/systems.ui \
+    src/stations.ui
 
 DISTFILES += \
     sql/base.sql
