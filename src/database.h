@@ -3,10 +3,7 @@
 
 #include <QSqlDatabase>
 #include <QSettings>
-#include <QList>
-#include <QMap>
-#include <QString>
-#include <QVariant>
+#include "model/systemdatabase.h"
 
 #ifdef QT_DEBUG
     #include <QDebug>
@@ -17,10 +14,7 @@ class Database
     public:
         Database();
         ~Database();
-        QList<QMap<QString, QVariant>> selectSystems();
-        bool addSystem(QString name);
-        bool removeSystem(int id);
-        bool changeSystem(int id, QString newName);
+        SystemDatabase* system();
 
     private:
         QSqlDatabase *m_database;

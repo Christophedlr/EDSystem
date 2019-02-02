@@ -26,7 +26,7 @@ void Systems::on_addButton_clicked()
 
     if (!name.isEmpty())
     {
-        if (m_database.addSystem(name)) {
+        if (m_database.system()->add(name)) {
             QMessageBox::information(this,
                         "Ajout",
                         "La ligne a bien été ajoutée dans la table"
@@ -39,7 +39,7 @@ void Systems::on_addButton_clicked()
 void Systems::refreshTable()
 {
     QList<QMap<QString, QVariant>> list;
-    list = m_database.selectSystems();
+    list = m_database.system()->select();
 
     ui->tableWidget->clearContents();
     ui->tableWidget->setRowCount(0);
@@ -66,7 +66,7 @@ void Systems::on_removeButton_clicked()
                 question,
                 QMessageBox::Yes|QMessageBox::No
                 ) == QMessageBox::Yes) {
-        if (m_database.removeSystem(ui->tableWidget->item(ui->tableWidget->currentRow(), 0)->text().toInt())) {
+        if (m_database.system()->remove(ui->tableWidget->item(ui->tableWidget->currentRow(), 0)->text().toInt())) {
             QMessageBox::information(this,
                         "Suppression",
                         "La ligne a bien été supprimée de la table"
@@ -82,7 +82,7 @@ void Systems::on_changeButton_clicked()
 
     if (!name.isEmpty())
     {
-        if (m_database.changeSystem(ui->tableWidget->item(ui->tableWidget->currentRow(), 0)->text().toInt(), name)) {
+        if (m_database.system()->change(ui->tableWidget->item(ui->tableWidget->currentRow(), 0)->text().toInt(), name)) {
             QMessageBox::information(this,
                         "Modification",
                         "La ligne a bien été modifiée dans la table"

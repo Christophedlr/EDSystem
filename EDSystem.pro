@@ -29,14 +29,16 @@ SOURCES += \
     src/menu.cpp \
     src/systems.cpp \
     src/stations.cpp \
-    src/database.cpp
+    src/database.cpp \
+    src/model/systemdatabase.cpp
 
 HEADERS += \
     src/configuration/firstconfig.h \
     src/menu.h \
     src/systems.h \
     src/stations.h \
-    src/database.h
+    src/database.h \
+    src/model/systemdatabase.h
 
 FORMS += \
         src\menu.ui \
