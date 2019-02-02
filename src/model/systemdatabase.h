@@ -2,6 +2,7 @@
 #define SYSTEMDATABASE_H
 
 #include <QSqlDatabase>
+#include <QSqlQuery>
 #include <QList>
 #include <QMap>
 #include <QString>
@@ -20,6 +21,7 @@ class SystemDatabase
         bool add(QString name);
         bool remove(int id);
         bool change(int id, QString newName);
+        bool exec(QSqlQuery query, QString debugMethod);
 
     private:
         QSqlDatabase *m_database;

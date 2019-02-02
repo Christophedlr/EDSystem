@@ -1,5 +1,4 @@
 #include <QSqlError>
-#include <QSqlQuery>
 #include <QSqlRecord>
 #include "systemdatabase.h"
 
@@ -48,16 +47,7 @@ bool SystemDatabase::add(QString name)
     query.prepare("INSERT INTO `system` (`name`) VALUES(?)");
     query.bindValue(0, name);
 
-    if (!query.exec()) {
-        #ifdef QT_DEBUG
-            qDebug() << "addSystem - Not executed";
-            qDebug() << query.lastError().text();
-        #endif
-
-        return false;
-    }
-
-    return true;
+    return this->exec(query, "addSystem");
 }
 
 bool SystemDatabase::remove(int id)
@@ -67,16 +57,7 @@ bool SystemDatabase::remove(int id)
     query.prepare("DELETE FROM `system` WHERE `id`=?");
     query.bindValue(0, id);
 
-    if (!query.exec()) {
-        #ifdef QT_DEBUG
-            qDebug() << "removeSystem - Not executed";
-            qDebug() << query.lastError().text();
-        #endif
-
-        return false;
-    }
-
-    return true;
+    return this->exec(query, "removeSystem");
 }
 
 bool SystemDatabase::change(int id, QString newName)
@@ -87,9 +68,14 @@ bool SystemDatabase::change(int id, QString newName)
     query.bindValue(0, newName);
     query.bindValue(1, id);
 
+    return this->exec(query, "changeSystem");
+}
+
+bool SystemDatabase::exec(QSqlQuery query, QString debugMethod)
+{
     if (!query.exec()) {
         #ifdef QT_DEBUG
-            qDebug() << "changeSystem - Not executed";
+            qDebug() << debugMethod << " - Not executed";
             qDebug() << query.lastError().text();
         #endif
 
