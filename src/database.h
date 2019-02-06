@@ -4,6 +4,7 @@
 #include <QSqlDatabase>
 #include <QSettings>
 #include "model/systemdatabase.h"
+#include "model/stationdatabase.h"
 
 #ifdef QT_DEBUG
     #include <QDebug>
@@ -15,6 +16,7 @@ class Database
         Database();
         ~Database();
         SystemDatabase* system();
+        StationDatabase* station();
 
     private:
         QSqlDatabase *m_database;

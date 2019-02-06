@@ -17,8 +17,8 @@ public:
 
 private slots:
     void on_initialConfigButton_clicked();
-
     void on_systemsButton_clicked();
+    void on_StationsButton_clicked();
 
 private:
     Ui::Menu *ui;

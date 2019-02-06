@@ -39,3 +39,8 @@ SystemDatabase* Database::system()
 {
     return new SystemDatabase(m_database);
 }
+
+StationDatabase *Database::station()
+{
+    return new StationDatabase(m_database);
+}

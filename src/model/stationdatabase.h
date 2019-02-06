@@ -1,5 +1,5 @@
-#ifndef SYSTEMDATABASE_H
-#define SYSTEMDATABASE_H
+#ifndef STATIONDATABASE_H
+#define STATIONDATABASE_H
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -13,21 +13,18 @@
     #include <QDebug>
 #endif
 
-class SystemDatabase
+class StationDatabase
 {
     public:
-        SystemDatabase(QSqlDatabase *database);
-        ~SystemDatabase();
+        StationDatabase(QSqlDatabase *database);
         QList<QMap<QString, QVariant>> select();
-        QStringList selectNames();
-        bool add(QString name);
+        bool add(int systemId, QString name);
         bool remove(int id);
-        bool change(int id, QString newName);
-        int findByName(QString name);
+        bool change(int id, int systemId, QString name);
         bool exec(QSqlQuery query, QString debugMethod);
 
     private:
         QSqlDatabase *m_database;
 };
 
-#endif // SYSTEMDATABASE_H
+#endif // STATIONDATABASE_H

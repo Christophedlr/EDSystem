@@ -40,6 +40,27 @@ QList<QMap<QString, QVariant>> SystemDatabase::select()
     return list;
 }
 
+QStringList SystemDatabase::selectNames()
+{
+    QStringList list;
+    QSqlQuery query;
+
+    if (query.exec("SELECT * FROM `system`")) {
+        while (query.next()) {
+            list.append(query.value("name").toString());
+        }
+    } else {
+        #ifdef QT_DEBUG
+            QSqlError error = query.lastError();
+
+            qDebug() << "Query not executed";
+            qDebug() << error.text();
+        #endif
+    }
+
+    return list;
+}
+
 bool SystemDatabase::add(QString name)
 {
     QSqlQuery query;
@@ -69,6 +90,28 @@ bool SystemDatabase::change(int id, QString newName)
     query.bindValue(1, id);
 
     return this->exec(query, "changeSystem");
+}
+
+int SystemDatabase::findByName(QString name)
+{
+    QSqlQuery query;
+
+    query.prepare("SELECT `system`.`id` FROM `system` WHERE `name`=?");
+    query.bindValue(0, name);
+
+    if (query.exec()) {
+        query.next();
+        return query.value("id").toInt();
+    } else {
+        #ifdef QT_DEBUG
+            QSqlError error = query.lastError();
+
+            qDebug() << "Query not executed";
+            qDebug() << error.text();
+        #endif
+    }
+
+    return -1;
 }
 
 bool SystemDatabase::exec(QSqlQuery query, QString debugMethod)

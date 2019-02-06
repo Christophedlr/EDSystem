@@ -2,6 +2,7 @@
 #include "ui_menu.h"
 #include "configuration/firstconfig.h"
 #include "systems.h"
+#include "stations.h"
 
 Menu::Menu(QWidget *parent) :
     QWidget(parent),
@@ -25,4 +26,10 @@ void Menu::on_systemsButton_clicked()
 {
     Systems *systems = new Systems();
     systems->show();
+}
+
+void Menu::on_StationsButton_clicked()
+{
+    Stations *stations = new Stations();
+    stations->show();
 }
