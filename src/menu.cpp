@@ -3,6 +3,7 @@
 #include "configuration/firstconfig.h"
 #include "systems.h"
 #include "stations.h"
+#include "productcat.h"
 
 Menu::Menu(QWidget *parent) :
     QWidget(parent),
@@ -32,4 +33,10 @@ void Menu::on_StationsButton_clicked()
 {
     Stations *stations = new Stations();
     stations->show();
+}
+
+void Menu::on_productCatButton_clicked()
+{
+    ProductCat *productCat = new ProductCat();
+    productCat->show();
 }

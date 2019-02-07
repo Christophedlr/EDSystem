@@ -32,7 +32,10 @@ SOURCES += \
     src/database.cpp \
     src/model/systemdatabase.cpp \
     src/model/stationdatabase.cpp \
-    src/dialog/stationdialog.cpp
+    src/dialog/stationdialog.cpp \
+    src/productcat.cpp \
+    src/model/productcatdatabase.cpp \
+    src/dialog/productdialog.cpp
 
 HEADERS += \
     src/configuration/firstconfig.h \
@@ -42,14 +45,19 @@ HEADERS += \
     src/database.h \
     src/model/systemdatabase.h \
     src/model/stationdatabase.h \
-    src/dialog/stationdialog.h
+    src/dialog/stationdialog.h \
+    src/productcat.h \
+    src/model/productcatdatabase.h \
+    src/dialog/productdialog.h
 
 FORMS += \
         src\menu.ui \
     src/configuration/firstconfig.ui \
     src/systems.ui \
     src/stations.ui \
-    src/dialog/stationdialog.ui
+    src/dialog/stationdialog.ui \
+    src/productcat.ui \
+    src/dialog/productdialog.ui
 
 DISTFILES += \
     sql/base.sql

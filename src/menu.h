@@ -20,6 +20,8 @@ private slots:
     void on_systemsButton_clicked();
     void on_StationsButton_clicked();
 
+    void on_productCatButton_clicked();
+
 private:
     Ui::Menu *ui;
 };

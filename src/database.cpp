@@ -44,3 +44,8 @@ StationDatabase *Database::station()
 {
     return new StationDatabase(m_database);
 }
+
+ProductCatDatabase *Database::productCat()
+{
+    return new ProductCatDatabase(m_database);
+}
