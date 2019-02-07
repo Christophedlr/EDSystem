@@ -1,5 +1,5 @@
-#ifndef PRODUCTCATDATABASE_H
-#define PRODUCTCATDATABASE_H
+#ifndef PRODUCTDATABASE_H
+#define PRODUCTDATABASE_H
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -13,20 +13,18 @@
     #include <QDebug>
 #endif
 
-class ProductCatDatabase
+class ProductDatabase
 {
     public:
-        ProductCatDatabase(QSqlDatabase *database);
+        ProductDatabase(QSqlDatabase *database);
         QList<QMap<QString, QVariant>> select();
-        QStringList selectNames();
-        bool add(QString name);
+        bool add(int catId, QString name);
         bool remove(int id);
-        bool change(int id, QString newName);
-        int findByName(QString name);
+        bool change(int id, int catId, QString name);
         bool exec(QSqlQuery query, QString debugMethod);
 
     private:
         QSqlDatabase *m_database;
 };
 
-#endif // PRODUCTCATDATABASE_H
+#endif // PRODUCTDATABASE_H

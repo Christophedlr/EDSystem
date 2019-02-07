@@ -4,6 +4,7 @@
 #include "systems.h"
 #include "stations.h"
 #include "productcat.h"
+#include "products.h"
 
 Menu::Menu(QWidget *parent) :
     QWidget(parent),
@@ -39,4 +40,10 @@ void Menu::on_productCatButton_clicked()
 {
     ProductCat *productCat = new ProductCat();
     productCat->show();
+}
+
+void Menu::on_productButton_clicked()
+{
+    Products *products = new Products();
+    products->show();
 }

@@ -35,6 +35,27 @@ QList<QMap<QString, QVariant> > ProductCatDatabase::select()
     return list;
 }
 
+QStringList ProductCatDatabase::selectNames()
+{
+    QStringList list;
+    QSqlQuery query;
+
+    if (query.exec("SELECT * FROM `product_category`")) {
+        while (query.next()) {
+            list.append(query.value("name").toString());
+        }
+    } else {
+        #ifdef QT_DEBUG
+            QSqlError error = query.lastError();
+
+            qDebug() << "Query not executed";
+            qDebug() << error.text();
+        #endif
+    }
+
+    return list;
+}
+
 bool ProductCatDatabase::add(QString name)
 {
     QSqlQuery query;

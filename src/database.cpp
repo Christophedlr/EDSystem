@@ -49,3 +49,8 @@ ProductCatDatabase *Database::productCat()
 {
     return new ProductCatDatabase(m_database);
 }
+
+ProductDatabase *Database::product()
+{
+    return new ProductDatabase(m_database);
+}
