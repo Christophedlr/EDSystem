@@ -37,7 +37,8 @@ SOURCES += \
     src/model/productcatdatabase.cpp \
     src/dialog/productdialog.cpp \
     src/products.cpp \
-    src/model/productdatabase.cpp
+    src/model/productdatabase.cpp \
+    src/model/entity.cpp
 
 HEADERS += \
     src/configuration/firstconfig.h \
@@ -52,7 +53,8 @@ HEADERS += \
     src/model/productcatdatabase.h \
     src/dialog/productdialog.h \
     src/products.h \
-    src/model/productdatabase.h
+    src/model/productdatabase.h \
+    src/model/entity.h
 
 FORMS += \
         src\menu.ui \
