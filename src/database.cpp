@@ -35,6 +35,11 @@ Database::~Database()
     delete m_database;
 }
 
+QSqlDatabase* Database::getDb()
+{
+    return m_database;
+}
+
 SystemDatabase* Database::system()
 {
     return new SystemDatabase(m_database);

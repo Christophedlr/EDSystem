@@ -17,6 +17,7 @@ class Database
     public:
         Database();
         ~Database();
+        QSqlDatabase* getDb();
         SystemDatabase* system();
         StationDatabase* station();
         ProductCatDatabase* productCat();

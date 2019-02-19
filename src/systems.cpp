@@ -1,11 +1,9 @@
 #include <QInputDialog>
-#include <QSettings>
-#include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QMessageBox>
-#include <QTableWidgetItem>
 #include "systems.h"
 #include "ui_systems.h"
+#include "repository/systemrepository.h"
 
 Systems::Systems(QWidget *parent) :
     QWidget(parent),
@@ -26,7 +24,12 @@ void Systems::on_addButton_clicked()
 
     if (!name.isEmpty())
     {
-        if (m_database.system()->add(name)) {
+        SystemEntity entity;
+        SystemRepository repos(m_database.getDb());
+
+        entity.setName(name);
+
+        if (repos.persist(entity)) {
             QMessageBox::information(this,
                         "Ajout",
                         "La ligne a bien été ajoutée dans la table"
@@ -38,21 +41,18 @@ void Systems::on_addButton_clicked()
 
 void Systems::refreshTable()
 {
-    QList<QMap<QString, QVariant>> list;
-    list = m_database.system()->select();
+    QList<SystemEntity> list;
+    SystemRepository repos(m_database.getDb());
+
+    list = repos.find();
 
     ui->tableWidget->clearContents();
     ui->tableWidget->setRowCount(0);
 
     for (int i = 0; i < list.count(); ++i) {
-        QMap<QString, QVariant> result;
-
-        result = list.at(i);
-        for (int x = 0; x < result.count()-1; ++x) {
-            ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-            ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, ui->tableWidget->columnCount()-2, new QTableWidgetItem(result.value("id").toString()));
-            ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, ui->tableWidget->columnCount()-1, new QTableWidgetItem(result.value("name").toString()));
-        }
+        ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+        ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, ui->tableWidget->columnCount()-2, new QTableWidgetItem(QString::number(list.value(i).getId())));
+        ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, ui->tableWidget->columnCount()-1, new QTableWidgetItem(list.value(i).getName()));
     }
 }
 
@@ -66,7 +66,12 @@ void Systems::on_removeButton_clicked()
                 question,
                 QMessageBox::Yes|QMessageBox::No
                 ) == QMessageBox::Yes) {
-        if (m_database.system()->remove(ui->tableWidget->item(ui->tableWidget->currentRow(), 0)->text().toInt())) {
+        SystemEntity entity;
+        SystemRepository repos(m_database.getDb());
+
+        entity.setId(ui->tableWidget->item(ui->tableWidget->currentRow(), 0)->text().toInt());
+
+        if (repos.remove(entity)) {
             QMessageBox::information(this,
                         "Suppression",
                         "La ligne a bien été supprimée de la table"
@@ -82,7 +87,13 @@ void Systems::on_changeButton_clicked()
 
     if (!name.isEmpty())
     {
-        if (m_database.system()->change(ui->tableWidget->item(ui->tableWidget->currentRow(), 0)->text().toInt(), name)) {
+        SystemEntity entity;
+        SystemRepository repos(m_database.getDb());
+
+        entity.setId(ui->tableWidget->item(ui->tableWidget->currentRow(), 0)->text().toInt());
+        entity.setName(name);
+
+        if (repos.persist(entity)) {
             QMessageBox::information(this,
                         "Modification",
                         "La ligne a bien été modifiée dans la table"
