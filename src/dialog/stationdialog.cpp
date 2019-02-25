@@ -27,3 +27,8 @@ void StationDialog::setSystemList(QStringList list)
 {
     ui->systemCBox->addItems(list);
 }
+
+void StationDialog::on_acceptButton_clicked()
+{
+    m_validate = true;
+}
