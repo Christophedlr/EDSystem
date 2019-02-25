@@ -6,6 +6,8 @@
 #include "stations.h"
 #include "ui_stations.h"
 #include "dialog/stationdialog.h"
+#include "repository/stationrepository.h"
+#include "repository/systemrepository.h"
 
 Stations::Stations(QWidget *parent) :
     QWidget(parent),
@@ -23,12 +25,22 @@ Stations::~Stations()
 void Stations::on_addButton_clicked()
 {
     StationDialog *dialog = new StationDialog();
+    SystemRepository systemRepos(m_database.getDb());
+    StationRepository stationRepos(m_database.getDb());
 
-    dialog->setSystemList(m_database.system()->selectNames());
+    SystemEntity system;
+    StationEntity station;
+
+    dialog->setSystemList(systemRepos.findNamesOnly());
     dialog->exec();
 
-    if (dialog->Accepted) {
-        if (m_database.station()->add(m_database.system()->findByName(dialog->system()), dialog->station())) {
+    if (dialog->m_validate) {
+        system = systemRepos.findOneByName(dialog->system());
+        station.setName(dialog->station());
+        station.setSystem(system);
+
+        //m_database.station()->add(m_database.system()->findByName(dialog->system()), dialog->station())
+        if (stationRepos.persist(station)) {
             QMessageBox::information(this,
                         "Ajout",
                         "La ligne a bien été ajoutée dans la table"
@@ -40,22 +52,35 @@ void Stations::on_addButton_clicked()
 
 void Stations::refreshTable()
 {
-    QList<QMap<QString, QVariant>> list;
-    list = m_database.station()->select();
+    QList<StationEntity> list;
+    StationRepository repos(m_database.getDb());
+
+    list = repos.find();
 
     ui->tableWidget->clearContents();
     ui->tableWidget->setRowCount(0);
 
     for (int i = 0; i < list.count(); ++i) {
-        QMap<QString, QVariant> result;
+        StationEntity entity = list.value(i);
+        ui->tableWidget->insertRow(ui->tableWidget->rowCount());
 
-        result = list.at(i);
-        for (int x = 0; x < result.count()-2; ++x) {
-            ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-            ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, ui->tableWidget->columnCount()-3, new QTableWidgetItem(result.value("id").toString()));
-            ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, ui->tableWidget->columnCount()-2, new QTableWidgetItem(result.value("system").toString()));
-            ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, ui->tableWidget->columnCount()-1, new QTableWidgetItem(result.value("name").toString()));
-        }
+        ui->tableWidget->setItem(
+                    ui->tableWidget->rowCount()-1,
+                    ui->tableWidget->columnCount()-3,
+                    new QTableWidgetItem(QString::number(entity.getId()))
+                    );
+
+        ui->tableWidget->setItem(
+                    ui->tableWidget->rowCount()-1,
+                    ui->tableWidget->columnCount()-2,
+                    new QTableWidgetItem(entity.getSystem().getName())
+                    );
+
+        ui->tableWidget->setItem(
+                    ui->tableWidget->rowCount()-1,
+                    ui->tableWidget->columnCount()-1,
+                    new QTableWidgetItem(entity.getName())
+                    );
     }
 }
 
