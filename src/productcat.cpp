@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include "productcat.h"
 #include "ui_productcat.h"
+#include "repository/productcatrepository.h"
 
 ProductCat::ProductCat(QWidget *parent) :
     QWidget(parent),
@@ -21,21 +22,17 @@ ProductCat::~ProductCat()
 
 void ProductCat::refreshTable()
 {
-    QList<QMap<QString, QVariant>> list;
-    list = m_database.productCat()->select();
+    QList<ProductCatEntity> list;
+    ProductCatRepository repos(m_database.getDb());
 
+    list = repos.find();
     ui->tableWidget->clearContents();
     ui->tableWidget->setRowCount(0);
 
     for (int i = 0; i < list.count(); ++i) {
-        QMap<QString, QVariant> result;
-
-        result = list.at(i);
-        for (int x = 0; x < result.count()-1; ++x) {
-            ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-            ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, ui->tableWidget->columnCount()-2, new QTableWidgetItem(result.value("id").toString()));
-            ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, ui->tableWidget->columnCount()-1, new QTableWidgetItem(result.value("name").toString()));
-        }
+        ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+        ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, ui->tableWidget->columnCount()-2, new QTableWidgetItem(QString::number(list.value(i).getId())));
+        ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, ui->tableWidget->columnCount()-1, new QTableWidgetItem(list.value(i).getName()));
     }
 }
 
@@ -45,7 +42,12 @@ void ProductCat::on_addButton_clicked()
 
     if (!name.isEmpty())
     {
-        if (m_database.productCat()->add(name)) {
+        ProductCatEntity entity;
+        ProductCatRepository repos(m_database.getDb());
+
+        entity.setName(name);
+
+        if (repos.persist(entity)) {
             QMessageBox::information(this,
                         "Ajout",
                         "La ligne a bien été ajoutée dans la table"
@@ -61,7 +63,13 @@ void ProductCat::on_changeButton_clicked()
 
     if (!name.isEmpty())
     {
-        if (m_database.productCat()->change(ui->tableWidget->item(ui->tableWidget->currentRow(), 0)->text().toInt(), name)) {
+        ProductCatEntity entity;
+        ProductCatRepository repos(m_database.getDb());
+
+        entity.setId(ui->tableWidget->item(ui->tableWidget->currentRow(), 0)->text().toInt());
+        entity.setName(name);
+
+        if (repos.persist(entity)) {
             QMessageBox::information(this,
                         "Modification",
                         "La ligne a bien été modifiée dans la table"
@@ -81,7 +89,12 @@ void ProductCat::on_removeButton_clicked()
                 question,
                 QMessageBox::Yes|QMessageBox::No
                 ) == QMessageBox::Yes) {
-        if (m_database.productCat()->remove(ui->tableWidget->item(ui->tableWidget->currentRow(), 0)->text().toInt())) {
+        ProductCatEntity entity;
+        ProductCatRepository repos(m_database.getDb());
+
+        entity.setId(ui->tableWidget->item(ui->tableWidget->currentRow(), 0)->text().toInt());
+
+        if (repos.remove(entity)) {
             QMessageBox::information(this,
                         "Suppression",
                         "La ligne a bien été supprimée de la table"

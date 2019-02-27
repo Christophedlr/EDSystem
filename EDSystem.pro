@@ -42,7 +42,9 @@ SOURCES += \
     src/entity/systementity.cpp \
     src/repository/systemrepository.cpp \
     src/entity/stationentity.cpp \
-    src/repository/stationrepository.cpp
+    src/repository/stationrepository.cpp \
+    src/entity/productcatentity.cpp \
+    src/repository/productcatrepository.cpp
 
 HEADERS += \
     src/configuration/firstconfig.h \
@@ -62,7 +64,9 @@ HEADERS += \
     src/entity/systementity.h \
     src/repository/systemrepository.h \
     src/entity/stationentity.h \
-    src/repository/stationrepository.h
+    src/repository/stationrepository.h \
+    src/entity/productcatentity.h \
+    src/repository/productcatrepository.h
 
 FORMS += \
         src\menu.ui \
