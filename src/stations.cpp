@@ -39,7 +39,6 @@ void Stations::on_addButton_clicked()
         station.setName(dialog->station());
         station.setSystem(system);
 
-        //m_database.station()->add(m_database.system()->findByName(dialog->system()), dialog->station())
         if (stationRepos.persist(station)) {
             QMessageBox::information(this,
                         "Ajout",
@@ -94,7 +93,12 @@ void Stations::on_removeButton_clicked()
                 question,
                 QMessageBox::Yes|QMessageBox::No
                 ) == QMessageBox::Yes) {
-        if (m_database.station()->remove(ui->tableWidget->item(ui->tableWidget->currentRow(), 0)->text().toInt())) {
+        StationRepository stationRepos(m_database.getDb());
+        StationEntity station;
+
+        station = stationRepos.findOneByName(ui->tableWidget->item(ui->tableWidget->currentRow(), 2)->text());
+
+        if (stationRepos.remove(station)) {
             QMessageBox::information(this,
                         "Suppression",
                         "La ligne a bien été supprimée de la table"
@@ -107,16 +111,22 @@ void Stations::on_removeButton_clicked()
 void Stations::on_changeButton_clicked()
 {
     StationDialog *dialog = new StationDialog();
+    SystemRepository systemRepos(m_database.getDb());
+    StationRepository stationRepos(m_database.getDb());
 
-    dialog->setSystemList(m_database.system()->selectNames());
+    SystemEntity system;
+    StationEntity station;
+
+    dialog->setSystemList(systemRepos.findNamesOnly());
     dialog->exec();
 
-    if (dialog->Accepted) {
-        if (m_database.station()->change(
-                    ui->tableWidget->item(ui->tableWidget->currentRow(), 0)->text().toInt(),
-                    m_database.system()->findByName(dialog->system()),
-                    dialog->station()
-                    )) {
+    if (dialog->m_validate) {
+        station = stationRepos.findOneByName(ui->tableWidget->item(ui->tableWidget->currentRow(), 2)->text());
+        system = systemRepos.findOneByName(dialog->system());
+        station.setName(dialog->station());
+        station.setSystem(system);
+
+        if (stationRepos.persist(station)) {
             QMessageBox::information(this,
                         "Modification",
                         "La ligne a bien été modifiée dans la table"
