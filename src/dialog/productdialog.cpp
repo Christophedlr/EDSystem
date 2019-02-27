@@ -27,3 +27,8 @@ void ProductDialog::setCategoryList(QStringList list)
 {
     ui->categoryCBox->addItems(list);
 }
+
+void ProductDialog::on_acceptButton_clicked()
+{
+    m_validate = true;
+}

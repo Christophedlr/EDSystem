@@ -44,7 +44,9 @@ SOURCES += \
     src/entity/stationentity.cpp \
     src/repository/stationrepository.cpp \
     src/entity/productcatentity.cpp \
-    src/repository/productcatrepository.cpp
+    src/repository/productcatrepository.cpp \
+    src/entity/productentity.cpp \
+    src/repository/productrepository.cpp
 
 HEADERS += \
     src/configuration/firstconfig.h \
@@ -66,7 +68,9 @@ HEADERS += \
     src/entity/stationentity.h \
     src/repository/stationrepository.h \
     src/entity/productcatentity.h \
-    src/repository/productcatrepository.h
+    src/repository/productcatrepository.h \
+    src/entity/productentity.h \
+    src/repository/productrepository.h
 
 FORMS += \
         src\menu.ui \

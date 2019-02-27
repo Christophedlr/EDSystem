@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>174</width>
+    <width>176</width>
     <height>139</height>
    </rect>
   </property>
@@ -43,47 +43,55 @@
     </layout>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="buttonBox_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="acceptButton">
+       <property name="text">
+        <string>OK</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="rejectButton">
+       <property name="text">
+        <string>Annuler</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox_2</sender>
-   <signal>accepted()</signal>
+   <sender>acceptButton</sender>
+   <signal>clicked()</signal>
    <receiver>ProductDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>86</x>
-     <y>118</y>
+     <x>47</x>
+     <y>116</y>
     </hint>
     <hint type="destinationlabel">
-     <x>86</x>
+     <x>87</x>
      <y>69</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox_2</sender>
-   <signal>rejected()</signal>
+   <sender>rejectButton</sender>
+   <signal>clicked()</signal>
    <receiver>ProductDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>86</x>
-     <y>118</y>
+     <x>128</x>
+     <y>116</y>
     </hint>
     <hint type="destinationlabel">
-     <x>86</x>
+     <x>87</x>
      <y>69</y>
     </hint>
    </hints>

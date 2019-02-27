@@ -6,6 +6,8 @@
 #include "products.h"
 #include "ui_products.h"
 #include "dialog/productdialog.h"
+#include "repository/productrepository.h"
+#include "repository/productcatrepository.h"
 
 Products::Products(QWidget *parent) :
     QWidget(parent),
@@ -22,34 +24,40 @@ Products::~Products()
 
 void Products::refreshTable()
 {
-    QList<QMap<QString, QVariant>> list;
-    list = m_database.product()->select();
+    QList<ProductEntity> list;
+    ProductRepository repos(m_database.getDb());
+
+    list = repos.find();
 
     ui->tableWidget->clearContents();
     ui->tableWidget->setRowCount(0);
 
     for (int i = 0; i < list.count(); ++i) {
-        QMap<QString, QVariant> result;
-
-        result = list.at(i);
-        for (int x = 0; x < result.count()-2; ++x) {
-            ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-            ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, ui->tableWidget->columnCount()-3, new QTableWidgetItem(result.value("id").toString()));
-            ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, ui->tableWidget->columnCount()-2, new QTableWidgetItem(result.value("category").toString()));
-            ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, ui->tableWidget->columnCount()-1, new QTableWidgetItem(result.value("name").toString()));
-        }
+        ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+        ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, ui->tableWidget->columnCount()-3, new QTableWidgetItem(QString::number(list.value(i).getId())));
+        ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, ui->tableWidget->columnCount()-2, new QTableWidgetItem(list.value(i).getCat().getName()));
+        ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, ui->tableWidget->columnCount()-1, new QTableWidgetItem(list.value(i).getName()));
     }
 }
 
 void Products::on_addButton_clicked()
 {
     ProductDialog *dialog = new ProductDialog();
+    ProductCatRepository catRepos(m_database.getDb());
+    ProductRepository productRepos(m_database.getDb());
 
-    dialog->setCategoryList(m_database.productCat()->selectNames());
+    ProductEntity product;
+    ProductCatEntity cat;
+
+    dialog->setCategoryList(catRepos.findNamesOnly());
     dialog->exec();
 
-    if (dialog->Accepted) {
-        if (m_database.product()->add(m_database.productCat()->findByName(dialog->category()), dialog->product())) {
+    if (dialog->m_validate) {
+        cat = catRepos.findOneByName(dialog->category());
+        product.setCat(cat);
+        product.setName(dialog->product());
+
+        if (productRepos.persist(product)) {
             QMessageBox::information(this,
                         "Ajout",
                         "La ligne a bien été ajoutée dans la table"
@@ -62,16 +70,22 @@ void Products::on_addButton_clicked()
 void Products::on_changeButton_clicked()
 {
     ProductDialog *dialog = new ProductDialog();
+    ProductCatRepository catRepos(m_database.getDb());
+    ProductRepository productRepos(m_database.getDb());
 
-    dialog->setCategoryList(m_database.productCat()->selectNames());
+    ProductEntity product;
+    ProductCatEntity cat;
+
+    dialog->setCategoryList(catRepos.findNamesOnly());
     dialog->exec();
 
-    if (dialog->Accepted) {
-        if (m_database.product()->change(
-                    ui->tableWidget->item(ui->tableWidget->currentRow(), 0)->text().toInt(),
-                    m_database.productCat()->findByName(dialog->category()),
-                    dialog->product()
-                    )) {
+    if (dialog->m_validate) {
+        product = productRepos.findOneByName(ui->tableWidget->item(ui->tableWidget->currentRow(), 2)->text());
+        cat = catRepos.findOneByName(dialog->category());
+        product.setName(dialog->product());
+        product.setCat(cat);
+
+        if (productRepos.persist(product)) {
             QMessageBox::information(this,
                         "Modification",
                         "La ligne a bien été modifiée dans la table"
@@ -91,7 +105,12 @@ void Products::on_removeButton_clicked()
                 question,
                 QMessageBox::Yes|QMessageBox::No
                 ) == QMessageBox::Yes) {
-        if (m_database.product()->remove(ui->tableWidget->item(ui->tableWidget->currentRow(), 0)->text().toInt())) {
+        ProductRepository repos(m_database.getDb());
+        ProductEntity entity;
+
+        entity = repos.findOneByName(ui->tableWidget->item(ui->tableWidget->currentRow(), 2)->text());
+
+        if (repos.remove(entity)) {
             QMessageBox::information(this,
                         "Suppression",
                         "La ligne a bien été supprimée de la table"

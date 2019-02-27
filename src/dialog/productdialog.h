@@ -17,6 +17,10 @@ public:
     QString category();
     QString product();
     void setCategoryList(QStringList list);
+    bool m_validate = false;
+
+private slots:
+    void on_acceptButton_clicked();
 
 private:
     Ui::ProductDialog *ui;
