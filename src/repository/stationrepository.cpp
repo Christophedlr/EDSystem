@@ -74,6 +74,27 @@ StationEntity StationRepository::findOneByName(QString name)
     return station;
 }
 
+QStringList StationRepository::findNamesOnly()
+{
+    QSqlQuery query;
+    QStringList list;
+
+    if (query.exec("SELECT `station`.`name`")) {
+        while (query.next()) {
+            list.append(query.value("name").toString());
+        }
+    } else {
+        #ifdef QT_DEBUG
+            QSqlError error = query.lastError();
+
+            qDebug() << "Query not executed";
+            qDebug() << error.text();
+        #endif
+    }
+
+    return list;
+}
+
 bool StationRepository::persist(const StationEntity &entity)
 {
     if (entity.getId() > 0) {

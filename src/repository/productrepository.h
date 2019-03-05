@@ -1,5 +1,5 @@
-#ifndef STATIONREPOSITORY_H
-#define STATIONREPOSITORY_H
+#ifndef PRODUCTREPOSITORY_H
+#define PRODUCTREPOSITORY_H
 
 #include <QList>
 #include <QSqlDatabase>
@@ -11,6 +11,7 @@ class ProductRepository
         ProductRepository(QSqlDatabase *database);
         QList<ProductEntity> find();
         ProductEntity findOneByName(QString name);
+        QStringList findNamesOnly();
         bool persist(const ProductEntity &entity);
         bool remove(const ProductEntity &entity);
 
@@ -21,4 +22,4 @@ class ProductRepository
         bool update(const ProductEntity &entity);
 };
 
-#endif // STATIONREPOSITORY_H
+#endif // PRODUCTREPOSITORY_H

@@ -1,5 +1,5 @@
-#ifndef STATIONENTITY_H
-#define STATIONENTITY_H
+#ifndef PRODUCTENTITY_H
+#define PRODUCTENTITY_H
 
 #include <QString>
 #include "../entity/productcatentity.h"
@@ -18,4 +18,4 @@ private:
         QString m_name;
 };
 
-#endif // STATIONENTITY_H
+#endif // PRODUCTENTITY_H

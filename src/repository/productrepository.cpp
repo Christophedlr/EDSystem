@@ -74,6 +74,27 @@ ProductEntity ProductRepository::findOneByName(QString name)
     return product;
 }
 
+QStringList ProductRepository::findNamesOnly()
+{
+    QSqlQuery query;
+    QStringList list;
+
+    if (query.exec("SELECT `name` FROM `product`")) {
+        while (query.next()) {
+            list.append(query.value("name").toString());
+        }
+    } else {
+        #ifdef QT_DEBUG
+            QSqlError error = query.lastError();
+
+            qDebug() << "Query not executed";
+            qDebug() << error.text();
+        #endif
+    }
+
+    return list;
+}
+
 bool ProductRepository::persist(const ProductEntity &entity)
 {
     if (entity.getId() > 0) {

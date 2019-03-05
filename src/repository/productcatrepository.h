@@ -1,5 +1,5 @@
-#ifndef SYSTEMREPOSITORY_H
-#define SYSTEMREPOSITORY_H
+#ifndef PRODUCTCATREPOSITORY_H
+#define PRODUCTCATREPOSITORY_H
 
 #include <QList>
 #include <QStringList>
@@ -24,4 +24,4 @@ class ProductCatRepository
         bool update(const ProductCatEntity &entity);
 };
 
-#endif // SYSTEMREPOSITORY_H
+#endif // PRODUCTCATREPOSITORY_H

@@ -11,6 +11,7 @@ class StationRepository
         StationRepository(QSqlDatabase *database);
         QList<StationEntity> find();
         StationEntity findOneByName(QString name);
+        QStringList findNamesOnly();
         bool persist(const StationEntity &entity);
         bool remove(const StationEntity &entity);
 
