@@ -41,6 +41,39 @@ QList<StationEntity> StationRepository::find()
     return list;
 }
 
+StationEntity StationRepository::findOne(unsigned int id)
+{
+    QSqlQuery query;
+    SystemEntity system;
+    StationEntity station;
+
+    query.prepare("SELECT `station`.`id` AS `id`, `system`.`id` AS `system_id`,"
+                  "`system`.`name` AS `system_name`,`station`.`name` AS `name`"
+                  "FROM `station` LEFT JOIN `system` ON `system`.`id` = `station`.`system`"
+                  "WHERE `station`.`id` = ?");
+    query.bindValue(0, id);
+
+    if (query.exec()) {
+        query.next();
+
+        system.setId(query.value("system_id").toUInt());
+        system.setName(query.value("system_name").toString());
+
+        station.setId(query.value("id").toUInt());
+        station.setName(query.value("name").toString());
+        station.setSystem(system);
+    } else {
+        #ifdef QT_DEBUG
+            QSqlError error = query.lastError();
+
+            qDebug() << "Query not executed";
+            qDebug() << error.text();
+        #endif
+    }
+
+    return station;
+}
+
 StationEntity StationRepository::findOneByName(QString name)
 {
     QSqlQuery query;
@@ -80,6 +113,30 @@ QStringList StationRepository::findNamesOnly()
     QStringList list;
 
     if (query.exec("SELECT `station`.`name`")) {
+        while (query.next()) {
+            list.append(query.value("name").toString());
+        }
+    } else {
+        #ifdef QT_DEBUG
+            QSqlError error = query.lastError();
+
+            qDebug() << "Query not executed";
+            qDebug() << error.text();
+        #endif
+    }
+
+    return list;
+}
+
+QStringList StationRepository::findNamesBySystem(const QString name)
+{
+    QSqlQuery query;
+    QStringList list;
+
+    query.prepare("SELECT `station`.`name`, `system`.`id` FROM `station` LEFT JOIN `system` ON `system`.`id` = `station`.`system` WHERE `system`.`name` = ?");
+    query.bindValue(0, name);
+
+    if (query.exec()) {
         while (query.next()) {
             list.append(query.value("name").toString());
         }

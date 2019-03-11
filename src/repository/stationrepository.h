@@ -10,8 +10,10 @@ class StationRepository
     public:
         StationRepository(QSqlDatabase *database);
         QList<StationEntity> find();
+        StationEntity findOne(unsigned int id);
         StationEntity findOneByName(QString name);
         QStringList findNamesOnly();
+        QStringList findNamesBySystem(const QString name);
         bool persist(const StationEntity &entity);
         bool remove(const StationEntity &entity);
 
