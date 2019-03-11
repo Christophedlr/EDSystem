@@ -10,8 +10,10 @@ class ProductRepository
     public:
         ProductRepository(QSqlDatabase *database);
         QList<ProductEntity> find();
+        ProductEntity findOne(unsigned int id);
         ProductEntity findOneByName(QString name);
         QStringList findNamesOnly();
+        QStringList findNamesByCat(const QString name);
         bool persist(const ProductEntity &entity);
         bool remove(const ProductEntity &entity);
 

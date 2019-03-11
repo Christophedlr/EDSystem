@@ -41,6 +41,39 @@ QList<ProductEntity> ProductRepository::find()
     return list;
 }
 
+ProductEntity ProductRepository::findOne(unsigned int id)
+{
+    QSqlQuery query;
+    ProductCatEntity cat;
+    ProductEntity product;
+
+    query.prepare("SELECT `product`.`id` AS `id`, `product_category`.`id` AS `cat_id`,"
+                  "`product_category`.`name` AS `cat_name`,`product`.`name` AS `name`"
+                  "FROM `product` LEFT JOIN `product_category` ON `product_category`.`id` = `product`.`category`"
+                  "WHERE `product`.`id` = ?");
+    query.bindValue(0, id);
+
+    if (query.exec()) {
+        query.next();
+
+        cat.setId(query.value("cat_id").toUInt());
+        cat.setName(query.value("cat_name").toString());
+
+        product.setId(query.value("id").toUInt());
+        product.setName(query.value("name").toString());
+        product.setCat(cat);
+    } else {
+        #ifdef QT_DEBUG
+            QSqlError error = query.lastError();
+
+            qDebug() << "Query not executed";
+            qDebug() << error.text();
+        #endif
+    }
+
+    return product;
+}
+
 ProductEntity ProductRepository::findOneByName(QString name)
 {
     QSqlQuery query;
@@ -80,6 +113,33 @@ QStringList ProductRepository::findNamesOnly()
     QStringList list;
 
     if (query.exec("SELECT `name` FROM `product`")) {
+        while (query.next()) {
+            list.append(query.value("name").toString());
+        }
+    } else {
+        #ifdef QT_DEBUG
+            QSqlError error = query.lastError();
+
+            qDebug() << "Query not executed";
+            qDebug() << error.text();
+        #endif
+    }
+
+    return list;
+}
+
+QStringList ProductRepository::findNamesByCat(const QString name)
+{
+    QSqlQuery query;
+    QStringList list;
+
+    query.prepare("SELECT `product`.`name`, `product_category`.`id`"
+                  "FROM `product` LEFT JOIN `product_category`"
+                  "ON `product_category`.`id` = `product`.`category`"
+                  "WHERE `product_category`.`name` = ?");
+    query.bindValue(0, name);
+
+    if (query.exec()) {
         while (query.next()) {
             list.append(query.value("name").toString());
         }
