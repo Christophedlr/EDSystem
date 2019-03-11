@@ -21,6 +21,7 @@ private slots:
     void on_StationsButton_clicked();
     void on_productCatButton_clicked();
     void on_productButton_clicked();
+    void on_pathsButton_clicked();
 
 private:
     Ui::Menu *ui;

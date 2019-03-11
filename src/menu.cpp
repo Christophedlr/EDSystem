@@ -5,6 +5,7 @@
 #include "stations.h"
 #include "productcat.h"
 #include "products.h"
+#include "paths.h"
 
 Menu::Menu(QWidget *parent) :
     QWidget(parent),
@@ -46,4 +47,10 @@ void Menu::on_productButton_clicked()
 {
     Products *products = new Products();
     products->show();
+}
+
+void Menu::on_pathsButton_clicked()
+{
+    Paths *paths = new Paths();
+    paths->show();
 }
