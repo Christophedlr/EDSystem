@@ -73,6 +73,71 @@ QList<PathEntity> PathRepository::find()
     return list;
 }
 
+PathEntity PathRepository::findOne(unsigned int id)
+{
+    QSqlQuery query;
+    SystemEntity system;
+    StationEntity station;
+    ProductCatEntity cat;
+    ProductEntity product;
+    PathEntity path;
+
+    query.prepare("SELECT"
+                  "`path_trade`.`id` AS `id`,"
+                  "`station`.`id` AS `station_id`,"
+                  "`station`.`name` AS `station_name`,"
+                  "`system`.`id` AS `system_id`,"
+                  "`system`.`name` AS `system_name`,"
+                  "`product`.`id` AS `product_id`,"
+                  "`product`.`name` AS `product_name`,"
+                  "`product_category`.`id` AS `cat_id`,"
+                  "`product_category`.`name` AS `cat_name`,"
+                  "`path_trade`.`profit` AS `profit`,"
+                  "`path_trade`.`quantity` AS `quantity`,"
+                  "`path_trade`.`date` AS `date`"
+                  "FROM `path_trade`"
+                  "LEFT JOIN `station` ON `station`.`id` = `path_trade`.`station`"
+                  "LEFT JOIN `system` ON `system`.`id` = `station`.`system`"
+                  "LEFT JOIN `product` ON `product`.id = `path_trade`.`product`"
+                  "LEFT JOIN `product_category` ON `product_category`.`id` = `product`.`category`"
+                  "WHERE `path_trade`.`id`=?");
+    query.bindValue(0, id);
+
+    if (query.exec()) {
+        query.next();
+
+        system.setId(query.value("system_id").toUInt());
+        system.setName(query.value("system_name").toString());
+
+        station.setId(query.value("id").toUInt());
+        station.setSystem(system);
+        station.setName(query.value("station_name").toString());
+
+        cat.setId(query.value("cat_id").toUInt());
+        cat.setName(query.value("cat_name").toString());
+
+        product.setId(query.value("product_id").toUInt());
+        product.setCat(cat);
+        product.setName(query.value("product_name").toString());
+
+        path.setId(query.value("id").toUInt());
+        path.setDate(query.value("date").toString());
+        path.setProduct(product);
+        path.setStation(station);
+        path.setQuantity(query.value("quantity").toUInt());
+        path.setProfit(query.value("profit").toUInt());
+    } else {
+        #ifdef QT_DEBUG
+            QSqlError error = query.lastError();
+
+            qDebug() << "Query not executed";
+            qDebug() << error.text();
+        #endif
+    }
+
+    return path;
+}
+
 bool PathRepository::persist(const PathEntity &entity)
 {
     if (entity.getId() > 0) {

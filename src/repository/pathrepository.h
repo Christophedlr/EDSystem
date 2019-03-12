@@ -9,6 +9,7 @@ class PathRepository
     public:
         PathRepository(QSqlDatabase *database);
         QList<PathEntity> find();
+        PathEntity findOne(unsigned int id);
         bool persist(const PathEntity &entity);
         bool remove(const PathEntity &entity);
 

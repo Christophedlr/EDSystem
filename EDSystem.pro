@@ -46,7 +46,11 @@ SOURCES += \
     src/entity/productcatentity.cpp \
     src/repository/productcatrepository.cpp \
     src/entity/productentity.cpp \
-    src/repository/productrepository.cpp
+    src/repository/productrepository.cpp \
+    src/paths.cpp \
+    src/dialog/pathdialog.cpp \
+    src/entity/pathentity.cpp \
+    src/repository/pathrepository.cpp
 
 HEADERS += \
     src/configuration/firstconfig.h \
@@ -70,7 +74,11 @@ HEADERS += \
     src/entity/productcatentity.h \
     src/repository/productcatrepository.h \
     src/entity/productentity.h \
-    src/repository/productrepository.h
+    src/repository/productrepository.h \
+    src/paths.h \
+    src/dialog/pathdialog.h \
+    src/entity/pathentity.h \
+    src/repository/pathrepository.h
 
 FORMS += \
         src\menu.ui \
@@ -80,7 +88,9 @@ FORMS += \
     src/dialog/stationdialog.ui \
     src/productcat.ui \
     src/dialog/productdialog.ui \
-    src/products.ui
+    src/products.ui \
+    src/paths.ui \
+    src/dialog/pathdialog.ui
 
 DISTFILES += \
     sql/base.sql
