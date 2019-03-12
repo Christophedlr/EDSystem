@@ -22,6 +22,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+RC_FILE = src\elite.rc
+
 
 SOURCES += \
         src/main.cpp \
@@ -93,4 +95,5 @@ FORMS += \
     src/dialog/pathdialog.ui
 
 DISTFILES += \
-    sql/base.sql
+    sql/base.sql \
+    src\elite.rc
