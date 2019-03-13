@@ -1,6 +1,6 @@
 # Installation
 
-Dézippé le fichier, pas besoin d'installation.
+Dézipper le fichier, pas besoin d'installation.
 
 # Configuration
 
